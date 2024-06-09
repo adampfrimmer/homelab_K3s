@@ -29,5 +29,5 @@ spec:
 
 
     # mongo --host mongodb --username adminuser --password ksiowkdlf --authenticationDatabase unifi-db
-  --from-literal=username=adminuser \
-  --from-literal=password=ksiowkdlf
+  # --from-literal=username=adminuser \
+  # --from-literal=password=ksiowkdlf
