@@ -17,9 +17,10 @@ argocd login localhost:8080 --username admin --password $PASSWORD --insecure
 sudo kubectl config set-context --current --namespace=argocd
 
 kubectl create namespace nginx-ingress
-argocd app create nginx \
+
+argocd app create nginx-ingress \
   --repo https://github.com/adampfrimmer/homelab_K3s.git \
-  --path nginx-ingress\
+  --path nginx-ingress/repo\
   --dest-server https://kubernetes.default.svc \
   --dest-namespace nginx-ingress \
   --sync-policy automated \
