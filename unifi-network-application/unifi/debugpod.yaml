@@ -28,4 +28,6 @@ spec:
     # db.getSiblingDB("unifi-db_stat").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi_stat"}]});
 
 
-    # mongo --host mongodb --username unifi --password password --authenticationDatabase unifi-db
+    # mongo --host mongodb --username adminuser --password ksiowkdlf --authenticationDatabase unifi-db
+  --from-literal=username=adminuser \
+  --from-literal=password=ksiowkdlf
