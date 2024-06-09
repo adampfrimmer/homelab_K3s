@@ -16,8 +16,8 @@ argocd login localhost:8080 --username admin --password $PASSWORD --insecure
 
 sudo kubectl config set-context --current --namespace=argocd
 
-kubectl create namespace nginx-ingress
 
+kubectl create namespace nginx-ingress
 argocd app create nginx-ingress \
   --repo https://github.com/adampfrimmer/homelab_K3s.git \
   --path nginx-ingress/repo\
@@ -25,6 +25,16 @@ argocd app create nginx-ingress \
   --dest-namespace nginx-ingress \
   --sync-policy automated \
   --self-heal
+
+kubectl create namespace metallb
+argocd app create metallb \
+  --repo https://github.com/adampfrimmer/homelab_K3s.git \
+  --path metallb/repo\
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace metallb \
+  --sync-policy automated \
+  --self-heal
+
 
 
 

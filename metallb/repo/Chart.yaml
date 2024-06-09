@@ -1,0 +1,10 @@
+apiVersion: v2
+name: nginx-ingress
+description: nginx-ingress
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+dependencies:
+- name: metallb
+  version: 0.13.12
+  repository: https://metallb.github.io/metallb
