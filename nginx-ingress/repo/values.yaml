@@ -1,0 +1,2 @@
+nginx-ingress:
+  replicaCount: 1
