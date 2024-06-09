@@ -28,10 +28,8 @@ echo -e "gluetun-wireguard-qbittorrent is deployed at $GLUETUN_IP:8080 with temp
 kubectl create namespace unifi
 
 kubectl create secret generic mongo-creds -n unifi \
-  --from-literal=username=adminuser \
-  --from-literal=password=ksiowkdlf
-
-
+  --from-literal=username= \
+  --from-literal=password=
 
 argocd app create mongodb \
   --repo https://github.com/adampfrimmer/homelab_K3s.git \
@@ -48,3 +46,6 @@ argocd app create unifi \
   --dest-namespace unifi \
   --sync-policy automated 
 
+
+UNIFI_IP=$(kubectl get svc unifi-tcp -n unifi -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo -e "unifi is deployed at $UNIFI_IP:8443"
