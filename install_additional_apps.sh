@@ -2,6 +2,12 @@
 
 
 kubectl create namespace gluetun
+
+kubectl create secret generic wireguard -n gluetun \
+--from-literal=PIA_USER="" \
+--from-literal=PIA_PASS=""
+
+
 argocd app create gluetun \
   --repo https://github.com/adampfrimmer/homelab_K3s.git \
   --path gluetun-wireguard-qbittorrent/repo\
@@ -16,3 +22,7 @@ password=$(echo "$log_line" | grep -oP 'A temporary password is provided for thi
 
 echo -e "gluetun-wireguard-qbittorrent is deployed at $GLUETUN_IP:8080 with temporary password: $password \nLogin and change this password under program preferences"
 
+
+
+
+kubectl create namespace gluetun

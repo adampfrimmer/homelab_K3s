@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-init-script
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+data:
+  init-mongo.js: |
+    db.getSiblingDB("unifi").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi"}]}); 
+    db.getSiblingDB("unifi_stat").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi_stat"}]});

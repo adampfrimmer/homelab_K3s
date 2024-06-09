@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/allow-shared-ip: 192.168.1.24
+  labels:
+    app: unifi
+  name: unifi-udp
+spec:
+  ports:
+  - name: apdiscovery
+    port: 10001
+    protocol: UDP
+    targetPort: 10001
+  - name: stun
+    port: 3478
+    protocol: UDP
+    targetPort: 3478
+  selector:
+    app: unifi
+  sessionAffinity: None
+  type: LoadBalancer
+
+
+

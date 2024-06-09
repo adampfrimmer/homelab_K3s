@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: docker.io/mongo:3.6
+
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db
+
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
+          readOnly: true
+        env:
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongo-creds
+              key: username
+        - name: MONGO_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mongo-creds
+              key: password
+        - name: MONGO_DBNAME
+          value: unifi-db
+
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongodb
+
+      - name: init-script
+        configMap:
+          name: mongo-init-script
