@@ -25,4 +25,18 @@ echo -e "gluetun-wireguard-qbittorrent is deployed at $GLUETUN_IP:8080 with temp
 
 
 
-kubectl create namespace gluetun
+kubectl create namespace unifi
+
+kubectl create secret generic mongo-creds -n unifi \
+  --from-literal=username=adminuser \
+  --from-literal=password=ksiowkdlf
+
+
+
+argocd app create mongodb \
+  --repo https://github.com/adampfrimmer/homelab_K3s.git \
+  --path unifi-network-application/mongodb \
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace unifi \
+  --sync-policy automated 
+

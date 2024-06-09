@@ -20,22 +20,22 @@ spec:
         - name: unifi-data
           mountPath: /config
         env:
-        # - name: MONGO_USER
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: mongo-creds
-        #       key: username
-
-        # - name: MONGO_PASS
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: mongo-creds
-        #       key: password
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongo-creds
+              key: username
 
         - name: MONGO_PASS
-          value: "password"
-        - name: MONGO_USER
-          value: "unifi"
+          valueFrom:
+            secretKeyRef:
+              name: mongo-creds
+              key: password
+
+        # - name: MONGO_PASS
+        #   value: "password"
+        # - name: MONGO_USER
+        #   value: "unifi"
               
         - name: MONGO_DBNAME
           value: unifi
@@ -48,8 +48,4 @@ spec:
       - name: unifi-data
         persistentVolumeClaim:
           claimName: unifi
-
-      - name: init-script
-        configMap:
-          name: mongo-init-script
 
