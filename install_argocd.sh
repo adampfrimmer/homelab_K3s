@@ -34,6 +34,14 @@ argocd app create metallb \
   --dest-namespace metallb \
   --sync-policy automated 
 
+kubectl create namespace gluetun
+argocd app create gluetun \
+  --repo https://github.com/adampfrimmer/homelab_K3s.git \
+  --path gluetun-wireguard-qbittorrent/repo\
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace gluetun \
+  --sync-policy automated 
+
 
 
 ARGOCD_IP=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')

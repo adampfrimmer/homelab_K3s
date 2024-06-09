@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gluetun-wireguard-qbittorrent-deployment
+  labels:
+    app: gluetun-wireguard-qbittorrent
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: gluetun-wireguard-qbittorrent
+  template:
+    metadata:
+      labels:
+        app: gluetun-wireguard-qbittorrent
+    spec:
+      containers:
+      - name: gluetun
+        image: ghcr.io/qdm12/gluetun
+        envFrom:
+        - secretRef:
+            name: wireguard
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        env:
+        - name: VPN_TYPE
+          value: "wireguard"
+        - name: VPN_SERVICE_PROVIDER
+          value: "custom"
+        volumeMounts:
+        - name: gluetun-config
+          mountPath: /gluetun
+        command:
+        - "/bin/sh"
+        - '-c'
+        - |
+          CONFIG_FILE="/gluetun/wireguard/wg0.conf"
+
+          if [ -f "$CONFIG_FILE" ]; then
+            rm -f "$CONFIG_FILE"
+            echo "File $CONFIG_FILE removed"
+          else
+            echo "File $CONFIG_FILE does not exist"
+          fi
+          apk update
+          apk add git curl jq wireguard-tools
+          git clone https://github.com/pia-foss/manual-connections.git
+          cd manual-connections
+          VPN_PROTOCOL=wireguard DISABLE_IPV6=yes DIP_TOKEN=no AUTOCONNECT=true PIA_CONNECT=false PIA_PF=false PIA_DNS=true ./run_setup.sh
+          mkdir -p /gluetun/wireguard/
+          cp /etc/wireguard/pia.conf /gluetun/wireguard/wg0.conf
+          cd /
+          ./gluetun-entrypoint
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:latest
+        env:
+        - name: TZ
+          value: "America/New_York"
+        - name: WEBUI_PORT
+          value: "8080"
+        - name: PGID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        volumeMounts:
+        - name: qbittorrent-config
+          mountPath: /config
+        - name: qbittorrent-downloads
+          mountPath: /downloads
+      volumes:
+      - name: gluetun-config
+        persistentVolumeClaim:
+          claimName: pvc-gluetun-config
+      - name: qbittorrent-config
+        persistentVolumeClaim:
+          claimName: pvc-qbittorrent-config
+      - name: qbittorrent-downloads
+        persistentVolumeClaim:
+          claimName: pvc-qbittorrent-downloads
