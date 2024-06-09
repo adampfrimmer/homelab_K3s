@@ -12,22 +12,3 @@ spec:
 
 
 
-      # - name: MONGO_PASS
-      #     value: password
-      #   - name: MONGO_USER
-      #     value: unifi
-              
-      #   - name: MONGO_DBNAME
-      #     value: unifi-db
-      #   - name: MONGO_PORT
-      #     value: "27017"
-      #   - name: MONGO_HOST
-      #     value: mongodb
-
-    # db.getSiblingDB("unifi-db").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi"}]}); 
-    # db.getSiblingDB("unifi-db_stat").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi_stat"}]});
-
-
-    # mongo --host mongodb --username adminuser --password ksiowkdlf --authenticationDatabase unifi-db
-  # --from-literal=username=adminuser \
-  # --from-literal=password=ksiowkdlf
