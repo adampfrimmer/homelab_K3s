@@ -32,11 +32,6 @@ spec:
               name: mongo-creds
               key: password
 
-        # - name: MONGO_PASS
-        #   value: "password"
-        # - name: MONGO_USER
-        #   value: "unifi"
-              
         - name: MONGO_DBNAME
           value: unifi
         - name: MONGO_PORT
