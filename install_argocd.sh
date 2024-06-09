@@ -16,6 +16,7 @@ argocd login localhost:8080 --username admin --password $PASSWORD --insecure
 
 sudo kubectl config set-context --current --namespace=argocd
 
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 kubectl create namespace nginx-ingress
 argocd app create nginx-ingress \
@@ -23,8 +24,7 @@ argocd app create nginx-ingress \
   --path nginx-ingress/repo\
   --dest-server https://kubernetes.default.svc \
   --dest-namespace nginx-ingress \
-  --sync-policy automated \
-  --self-heal
+  --sync-policy automated 
 
 kubectl create namespace metallb
 argocd app create metallb \
@@ -35,7 +35,13 @@ argocd app create metallb \
   --sync-policy automated 
 
 
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+ARGOCD_IP=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+echo "ARGOCD is deployed at $ARGOCD_IP with admin password: $PASSWORD"
+
+
+
 
 
 
