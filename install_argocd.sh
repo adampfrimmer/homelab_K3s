@@ -32,9 +32,10 @@ argocd app create metallb \
   --path metallb/repo\
   --dest-server https://kubernetes.default.svc \
   --dest-namespace metallb \
-  --sync-policy automated \
-  --self-heal
+  --sync-policy automated 
 
+
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 
 
