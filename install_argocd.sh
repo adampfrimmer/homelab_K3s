@@ -19,7 +19,7 @@ sudo kubectl config set-context --current --namespace=argocd
 kubectl create namespace nginx-ingress
 argocd app create nginx \
   --repo https://github.com/adampfrimmer/homelab_K3s.git \
-  --path nginx\
+  --path nginx-ingress\
   --dest-server https://kubernetes.default.svc \
   --dest-namespace nginx-ingress \
   --sync-policy automated \
