@@ -40,3 +40,11 @@ argocd app create mongodb \
   --dest-namespace unifi \
   --sync-policy automated 
 
+
+argocd app create unifi \
+  --repo https://github.com/adampfrimmer/homelab_K3s.git \
+  --path unifi-network-application/unifi \
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace unifi \
+  --sync-policy automated 
+

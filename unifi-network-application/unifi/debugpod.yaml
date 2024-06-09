@@ -24,8 +24,8 @@ spec:
         - name: MONGO_HOST
           value: mongodb
 
-    db.getSiblingDB("unifi-db").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi"}]}); 
-    db.getSiblingDB("unifi-db_stat").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi_stat"}]});
+    # db.getSiblingDB("unifi-db").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi"}]}); 
+    # db.getSiblingDB("unifi-db_stat").createUser({user: "unifi", pwd: "password", roles: [{role: "dbOwner", db: "unifi_stat"}]});
 
 
-    mongo --host mongodb --username unifi --password password --authenticationDatabase unifi-db
+    # mongo --host mongodb --username unifi --password password --authenticationDatabase unifi-db
