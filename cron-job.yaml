@@ -1,0 +1,61 @@
+# Create file cron-job.yaml
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: deleting-pods
+  namespace: gluetun
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: deleting-pods
+  namespace: gluetun
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "patch", "list", "watch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: deleting-pods
+  namespace: gluetun
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: deleting-pods
+subjects:
+  - kind: ServiceAccount
+    name: deleting-pods
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: deleting-pod
+  namespace: gluetun
+spec:
+  concurrencyPolicy: Forbid
+  #schedule: "0 */1 * * *" # At minute 0 past every hour, chage it.
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 600
+      template:
+        spec:
+          serviceAccountName: deleting-pods
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl
+              command:
+              command:
+              - /bin/sh
+              - -c
+              - "kubectl delete pods -l app=gluetun-wireguard-qbittorrent -n gluetun"
+# kubectl apply -f cron-job.yaml
+# kubectl get cronjob -n my-namespace
